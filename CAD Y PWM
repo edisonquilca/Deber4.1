@@ -1,0 +1,75 @@
+/*
+*CAPITULO IV: PERIFÉRICOS ESPECIALES
+*DEBER 4.1: CAD Y PWM
+*OBJETIVO:  Realizar un sistema en el cual se conecten 2 motores (parecido al diagrama que se utilizo en clase). Los datos de CAD, V y PWM se deben visulizar en una LCD para cada motor.  
+            A traves de la activación de un botón y un switch (el funcionamiento de un motor dependerá de la activación de un botón y el otro dependerá de la activación de un switch, a su elección)  
+            entrará en funcionamiento del motor que corresponda y se visualizará en la LCD de ese motor los datos de CAD, Voltaje y PWM.
+*NOMBRE: Edison Quilca 
+*FUNCIONES:         analogRead(conversor)
+*                              conversor -> A0 - A5
+*                   analogWrite(pin,dutty)
+*                               pin -> pines ~, dutty -> 0-255   /DUTTY nos permite ir variando del 0 al 255
+
+*/
+#include <LiquidCrystal.h>              //llamar a la librería
+LiquidCrystal lcd(0,1,6,7,8,9);       //Seleccion de pines para LCD 
+LiquidCrystal lcd1(13,12,5,4,3,2);       //Seleccion de pines para LCD 
+int conversor;                          //Variable para adquirir datos del pin analogo A0-A5
+float voltaje;                          //Variable de conversión del voltaje
+int dutty;  //variable para uso del PWM
+
+
+void setup() {
+  lcd.begin(16,2);                     //Inicializa la LCD
+  lcd1.begin(16,2);                        //Inicializa la LCD 2
+}
+
+void loop() {
+
+  //*******************************************************MOTOR 1*****************************************************************************************************/
+ conversor=analogRead(A0);           //Lectura del canal análogo A0 - "0" - 14
+  voltaje=(conversor*5.0)/1023.0;      //Conversor de voltaje       lo que esta defiiendo en la variable conversor multiplique por lo que obtengo en el voltaje, y esto divida para 1023 el valor máximo
+  dutty=conversor/4;                   //Cambio la escala para el ciclo dutty, 1024/257=4 por lo que dividimos para ese numero,  
+  analogWrite(10,dutty);               //Envio del valor al pin 11
+  lcd.setCursor(0,0);                  // ubicacion de cursor en la lcd
+  lcd.print("CAD:");                   // imprime un mensajeCAD"Conversor Analogo Digital"
+  lcd.setCursor(5,0);                  // ubicacion de cursor en la lcd
+  lcd.print(conversor);               
+  lcd.setCursor(0,1);                  //
+  lcd.print("V:");                     // 
+  lcd.setCursor(3,1);
+  lcd.print(voltaje);
+  lcd.setCursor(9,1);               
+  lcd.print("PWM:");
+  lcd.setCursor(13,1);
+  lcd.print((dutty*100)/255);             //cambiar a porcentaje
+  delay(300);
+ 
+  
+
+
+// ******************************************************MOTOR 2 ****************************************************************************************************
+
+ conversor=analogRead(A1);           //Lectura del canal análogo A0 - "0" - 14
+  voltaje=(conversor*5.0)/1023.0;      //Conversor de voltaje       lo que esta defiiendo en la variable conversor multiplique por lo que obtengo en el voltaje, y esto divida para 1023 el valor máximo
+  dutty=conversor/4;                   //Cambio la escala para el ciclo dutty, 1024/257=4 por lo que dividimos para ese numero,  
+  analogWrite(11,dutty);               //Envio del valor al pin 11
+  lcd1.setCursor(0,0);                  // ubicacion de cursor en la lcd
+  lcd1.print("CAD:");                   // imprime un mensajeCAD"Conversor Analogo Digital"
+  lcd1.setCursor(5,0);                  // ubicacion de cursor en la lcd
+  lcd1.print(conversor);               
+  lcd1.setCursor(0,1);                  //
+  lcd1.print("V:");                     // 
+  lcd1.setCursor(3,1);
+  lcd1.print(voltaje);
+  lcd1.setCursor(9,1);               
+  lcd1.print("PWM:");
+  lcd1.setCursor(13,1);
+  lcd1.print((dutty*100)/255);             //cambiar a porcentaje
+  delay(300);
+  lcd.clear();
+  lcd1.clear(); 
+}
+  
+  
+ 
